@@ -1,0 +1,143 @@
+4 farklı çözümü var
+-------------------
+First_Part:
+1. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -Eo  "i-.{17}" | sort | uniq > result.txt
+
+2. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -Eo  "i-[a-zA-Z0-9]{17}" | sort | uniq > result.txt
+
+3. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -o  "i-.\{17\}"| sort | uniq > result.txt
+
+4. cat event_history.csv | grep "serdar" | grep -i "Terminate" | grep -Eo  "i-.{17}" | sort | uniq > result.txt
+------------------------------------
+Second_Part:
+#!/bin/bash
+
+if [[ ${UID} -ne 0 ]] 
+then
+        echo "please run with sudo command"
+        exit 1
+fi
+
+read -p 'Enter the name: ' USER_NAME
+read -p 'Enter the comment: ' COMMENT
+read -sp 'Enter the password: ' PASSWORD
+
+useradd -c ${COMMENT} -m ${USER_NAME}
+
+if [[ $? -eq 0  ]]
+then
+        echo -e  "\nuser $USER_NAME created succesfully."
+else
+        echo "Try again"
+fi
+
+echo ${PASSWORD} | passwd --stdin ${USER_NAME}
+
+if [[ $? -eq 0  ]]
+then
+        echo -e  "\nPassword created succesfully."
+else
+        echo "Try again"
+fi
+
+passwd -e ${USER_NAME}
+-------------------------------------------
+Fourth_Part:
+
+Task-1:
+sed -i  "s/ec2-private_ip/$(grep -i "PrivateIpAddress" info.json | head -1 | cut -d'"' -f4)/" terraform.tf
+
+-----------------------
+Task-2:
+MY_KEY=$(cat certificate.pem)
+echo -e $MY_KEY > cert.pem
+--------------------------
+Task-3:
+
+grep -i "invalid user" auth.log  |  cut -d' ' -f8 | uniq -c > invalid_user.log (edited) 
+10:44
+grep -i "invalid user" auth.log  |  cut -d' ' -f9 | uniq -c >> invalid_user.log
+10:44
+cat invalid_user.log | grep -v "from|for|invalid|user
+-------------
+Third_Part:
+#!/bin/bash
+
+# Check if we are root privilage or not
+
+if [[ ${UID} -ne 0 ]]
+then
+   echo "Please use this bash script with root privilage"
+   exit 1
+fi
+
+# Which files are we going to back up. Please make sure to exist /home/ec2-user/data file
+
+backup_files="/home/ec2-user/data /etc /boot /usr"
+
+# Where do we backup to. Please crete this file before execute this script
+
+dest="/mnt/backup"
+
+# Create archive filename based on time
+
+time=$(date +"%Y_%m_%d_%I_%M_%p")
+hostname=$(hostname -s)
+archive_file="${hostname}-${time}.tgz"
+
+# Print start status message.
+
+echo "We will back up ${backup_files} to ${dest}/${archive_file} "
+date
+echo
+
+# Backup the files using tar.
+
+tar czf ${dest}/${archive_file} ${backup_files}
+
+# Print end status message.
+
+echo
+echo "Congrulations! Your Backup is ready"
+date
+
+# Long listing of files in $dest to check file sizes.
+
+ls -lh $dest
+------------
+
+sudo echo "Do I have root priviliges"
+if [[ $? == 0 ]]
+then
+echo   "Yes I have root priviliges "
+else
+echo "No, I do not have root priviliges. Check again "
+fi
+--------
+What does 2 Dev Null mean in Linux?
+After executing the ping command, '>/dev/null' tells the system to suppress the output, and '2>&1' directs the standard error stream to standard output. In this way, all output of the command is discarded.
+---------
+--stdin
+          This option is used to indicate that passwd should read the new
+          password from standard input, which can be a pipe.
+---------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
